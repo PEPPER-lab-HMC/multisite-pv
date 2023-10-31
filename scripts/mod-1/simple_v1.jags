@@ -1,0 +1,54 @@
+# Duncan's model for estimating PV parameters
+
+model{
+  for(i in 1:N){ # N observations
+    # likelihood
+    invP[i] ~ dnorm(mu[i], tau)
+    
+    # mean model (5 parameters)
+    mu[i] = a[id[i]] * exp(-b[id[i]] * x[i]) + c[id[i]] + d[id[i]]*x[i]
+  }
+  
+  # hierarchical parameters
+  for(j in 1:Nid){ # N samples
+    a[j] ~ dnorm(mu.a, tau.a)
+    b[j] ~ dnorm(mu.b, tau.b)
+    c[j] ~ dnorm(mu.c, tau.c)
+    d[j] ~ dnorm(mu.d, tau.d)
+  }
+  
+  # root node priors
+  # observation-level variance
+  tau ~ dgamma(0.01, 0.01)
+  sig <- pow(tau, -0.05)
+  
+  # population-level mean parameters
+  mu.a ~ dnorm(0, 0.001)
+  mu.b ~ dnorm(0, 0.001)
+  mu.c ~ dnorm(0, 0.001)
+  mu.d ~ dnorm(0, 0.001)
+  
+  # population-level variance parameters
+  sig.a ~ dunif(0, 5)
+  sig.b ~ dunif(0, 20)
+  sig.c ~ dunif(0, 1)
+  sig.d ~ dunif(0, 1)
+  tau.a <- pow(sig.a, -2)
+  tau.b <- pow(sig.b, -2)
+  tau.c <- pow(sig.c, -2)
+  tau.d <- pow(sig.d, -2)
+  
+  #tau.a ~ dgamma(0.01, 0.01)
+  #tau.b ~ dgamma(0.01, 0.01)
+  #tau.c ~ dgamma(0.01, 0.01)
+  #tau.d ~ dgamma(0.01, 0.01)
+  
+  #sig.a <- pow(tau.a, -0.5)
+  #sig.b <- pow(tau.b, -0.5)
+  #sig.c <- pow(tau.c, -0.5)
+  #sig.d <- pow(tau.d, -0.5)
+
+
+  
+  
+}
