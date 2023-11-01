@@ -4,10 +4,20 @@ model{
   for(i in 1:N){ # N observations
     # likelihood
     invP[i] ~ dnorm(mu[i], tau)
+    invP.rep[i] ~ dnorm(mu[i], tau)
     
     # mean model (5 parameters)
     mu[i] = a[id[i]] * exp(-b[id[i]] * x[i]) + c[id[i]] + d[id[i]]*x[i]
+    
+    # Part of the calculation of the posterior predictive loss	
+    Sqdiff[i] <- pow(invP.rep[i] - invP[i], 2)
   }
+  
+  # Compute Bayesian R2 value
+  var.pred <- pow(sd(mu[]),2)
+  var.resid <- 1/tau
+  R2_resid <- var.pred/(var.pred + var.resid)
+
   
   # hierarchical parameters
   for(j in 1:Nid){ # N samples
@@ -15,6 +25,11 @@ model{
     b[j] ~ dnorm(mu.b, tau.b)
     c[j] ~ dnorm(mu.c, tau.c)
     d[j] ~ dnorm(mu.d, tau.d)
+    
+    # calculations of xTLP and TLP
+    
+    #xTLP[j] = -1 * log(-1*d[j]/(a[j]*b[j])) / b[j]
+    #TLP[j] = a[j] * exp(-b[j] * xTLP[j]) + c[j] + d[j]*xTLP[j]
   }
   
   # root node priors
@@ -49,6 +64,11 @@ model{
   #sig.d <- pow(tau.d, -0.5)
 
 
+  # Calcluated population TLP
   
+  #mu.xTLP = -1 * log(-1*mu.d/(mu.a*mu.b)) / mu.b
+  #mu.TLP = mu.a * exp(-mu.b * mu.xTLP) + mu.c + mu.d*mu.xTLP
   
+  # Posterior predictive loss is the posterior mean of Dsum, must monitor Dsum
+  Dsum <- sum(Sqdiff[])
 }

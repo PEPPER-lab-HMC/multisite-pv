@@ -24,7 +24,8 @@ fn_df |>
   ggplot(aes(x = mass_lost, y = 1/P.MPa,
              color = sample)) +
   geom_point() +
-  geom_line()
+  geom_line() +
+  theme_bw()
 
 # Save out only TRUE points
 fn_df |> 
