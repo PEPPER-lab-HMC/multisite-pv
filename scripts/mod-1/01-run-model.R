@@ -160,7 +160,7 @@ pred <- cbind.data.frame(pv, rep_sum) |>
   mutate(invP = 1/P.MPa)
 
 m1 <- lm(pred.mean ~ invP, data = pred)
-sm1 <- summary(m1) # R2 = 0.1163
+sm1 <- summary(m1) # R2 = 0.9959
 
 ggplot(pred) +
   geom_abline(intercept = 0, slope = 1, col = "black",
