@@ -74,7 +74,6 @@ comb2 |>
   theme_bw()
 
 # Save out only TRUE points
-fn_df |> 
-  filter(keep == TRUE) |> 
-  left_join(dry, by = "ID")
+comb2 |> 
+  filter(keep == TRUE) |>
   write_csv("data_clean/pv_comb.csv")
