@@ -21,3 +21,21 @@ pv("latr_4", plotonly = T)
 pv("latr_5", plotonly = T)
 
 # When completed, csv's moved to data_raw/
+
+#### 20240308 run ####
+# collected 20230308, bagged at predawn in ziptop bag
+# was actively raining during predawn, very high values
+
+pv("latr_1")
+pv("latr_2")
+pv("latr_3")
+pv("latr_4")
+pv("latr_5")
+pv("latr_6")
+
+pv("latr_1", plotonly = T)
+pv("latr_2", plotonly = T)
+pv("latr_3", plotonly = T)
+pv("latr_4", plotonly = T)
+pv("latr_5", plotonly = T)
+pv("latr_6", plotonly = T)

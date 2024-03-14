@@ -2,10 +2,11 @@
 library(tidyverse)
 library(broom)
 
-fn <- list.files("data_raw/")
+# For initial trial 20231030, using rehydrated branchlets
+fn <- list.files("data_raw/20231030")
 fn_list<- list()
 for(i in 1:length(fn)) {
-  temp <- read_csv(paste0("data_raw/", fn[i])) |> 
+  temp <- read_csv(paste0("data_raw/20231030/", fn[i])) |> 
     select(1:7) |> 
     mutate(sample = paste0("LATR_", i),
            ID = i,
@@ -71,9 +72,14 @@ comb2 |>
              color = sample)) +
   geom_point() +
   geom_line() +
-  theme_bw()
+  scale_x_continuous("1 - RWC") +
+  scale_y_continuous(expression(paste("1/", Psi, " (-", MPa^-1, ")")))+
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        legend.title = element_blank(),
+        legend.position = c(0.75, 0.70))
 
 # Save out only TRUE points
 comb2 |> 
   filter(keep == TRUE) |>
-  write_csv("data_clean/pv_comb.csv")
+  write_csv("data_clean/pv_comb_20231030.csv")
