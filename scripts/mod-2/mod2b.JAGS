@@ -1,0 +1,83 @@
+# Add folded T priors for between sample precisions
+model{
+  
+  for(i in 1:N) {
+    # Likelihood for inverse WP in -MPa
+    y[i] ~ dnorm(mu[i], tau)
+    # Predictive distribution
+    y.rep[i] ~ dnorm(mu[i], tau)
+    # residuals
+    resid[i] <- mu[i] - y[i]
+    # squared differences
+    sqdiff[i] <- pow(y[i] - y.rep[i], 2)
+    
+    # Regression - changepoint between exponential decay and linear
+    mu[i] <- 
+      step(cp[id[i]] - x[i]) * (a[id[i]]*exp(-1*b[id[i]]*x[i])) +
+      step((x[i] - cp[id[i]]))*(-1*c[id[i]]*x[i] + d[i])
+    
+    # Reparmeterization
+    d[i] <- a[id[i]]*exp(-1*b[id[i]]*cp[id[i]]) - (-1*c[id[i]]*cp[id[i]])
+    
+  }
+  
+  # Priors for id-level parameters
+  for(s in 1:Nid) { # Number of samples
+    a[s] ~ dlnorm(mu.log.a, tau.log.a)
+    b[s] ~ dlnorm(mu.log.b, tau.log.b)
+    c[s] ~ dlnorm(mu.log.c, tau.log.c) # constrain to be negative
+    cp[s] ~ dnorm(mu.cp, tau.cp)
+    
+    # Calculate turgor loss point to monitor
+    tlp[s] <- -1 / (a[s]*exp(-1*b[s]*cp[s]))
+  }
+  
+  # Root node priors for means - normal distribution
+  mu.log.a ~ dnorm(0, 0.001)
+  mu.log.b ~ dnorm(0, 0.001)
+  mu.log.c ~ dnorm(0, 0.001)
+  mu.a <- exp(mu.log.a)
+  mu.b <- exp(mu.log.b)
+  mu.c <- exp(mu.log.c)
+  
+  # Root node priors for precisions - folded T
+  tau.eps.a ~ dt(0, Ta, 2)
+  sig.log.a <- abs(tau.eps.a)
+  tau.log.a <- pow(sig.log.a, -2)
+  
+  tau.eps.b ~ dt(0, Tb, 2)
+  sig.log.b <- abs(tau.eps.b)
+  tau.log.b <- pow(sig.log.b, -2)
+  
+  tau.eps.c ~ dt(0, Tc, 2)
+  sig.log.c <- abs(tau.eps.c)
+  tau.log.c <- pow(sig.log.c, -2)
+  
+  tau.eps.cp ~ dt(0, Tcp, 2)
+  sig.cp <- abs(tau.eps.cp)
+  tau.cp <- pow(sig.cp, -2)
+  
+  # Parameters for folded T are precision, set S (stdev) as data
+  Ta <- pow(Sa, -2)
+  Tb <- pow(Sb, -2)
+  Tc <- pow(Sc, -2)
+  Tcp <- pow(Scp, -2)
+  
+  # Informative priors for changepoint
+  mu.cp ~ dunif(0.1, 0.35)
+  mu.tlp <- -1/(mu.a*exp(-1*mu.b*mu.cp))
+  mean.tlp <- mean(tlp[])
+  
+  # Observation precision
+  tau ~ dgamma(0.01, 0.01)
+  sig <- pow(tau, -0.5)
+  
+  # Dsum
+  Dsum <- sum(sqdiff[])
+  # Bayesian R2
+  var.pred <- pow(sd(mu[]),2)
+  var.resid <- 1/tau
+  R2 <- var.pred/(var.pred + var.resid)
+  
+  
+}
