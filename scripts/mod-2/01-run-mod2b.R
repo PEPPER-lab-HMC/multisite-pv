@@ -157,13 +157,16 @@ gel$psrf %>%
   filter(grepl("^cp", rowname))
 
 # Run model for replicated data, time series of sigma and lambda
-coda.rep <- coda.samples(jm, 
+coda_rep <- coda.samples(jm, 
                          variable.names = c("y.rep"),
                          n.iter = 15000,
                          n.thin = 15)
 
+save(coda_rep, file = "scripts/mod-2/coda/rep_mod2b.Rdata")
+
+
 # Summarize replicated output
-coda_sum <- tidyMCMC(coda.rep,
+coda_sum <- tidyMCMC(coda_rep,
                      conf.int = TRUE,
                      conf.method = "HPDinterval") %>%
   rename(pred.mean = estimate,
@@ -175,7 +178,7 @@ pred <- cbind.data.frame(pv, coda_sum) |>
   mutate(y = 1/P.MPa)
 
 m1 <- lm(pred.mean ~ y, data = pred)
-summary(m1) # R2 = 0.9913, slope = 0.9857
+summary(m1) # R2 = 0.9927, slope = 0.989
 
 # Fit plot
 pred |> 
@@ -208,11 +211,17 @@ tlps <- param_sum |>
   filter(grepl("^tlp", term)) |> 
   tidyr::separate(term, 
                   into = c("Parameter", "ID")) |> 
-  mutate(ID = as.numeric(ID))
+  mutate(ID = as.numeric(ID),
+         x = 0.6,
+         y = 0.95,
+         lab = paste0("TLP = ", round(pred.mean, 3)))
 
 # Curves
 pred |> 
   ggplot() +
+  geom_text(data = tlps,
+            aes(x = x, y = y, label = lab),
+            hjust = 0) +
   geom_point(aes(x = mass_lost, y = y, color = "observed")) +
   geom_errorbar(aes(x = mass_lost, ymin = pred.lower, ymax = pred.upper,
                     color = "predicted"),
@@ -228,11 +237,12 @@ pred |>
             alpha = 0.25) +
   geom_vline(data = cps, aes(xintercept = pred.mean), lty = "dashed") +
   geom_hline(data = tlps, aes(yintercept = -1/pred.mean), lty = "dashed") +
-  facet_wrap(~ID, scales = "free") +
+  facet_wrap(~ID) +
   scale_x_continuous(expression(paste(H[2], "O lost (g)"))) +
   scale_y_continuous(expression(paste("1/", Psi[leaf], " (-MPa)"))) +
   scale_color_manual(values = c("black", "coral")) +
   theme_bw(base_size = 12) +
+  guides(color = "none") +
   theme(panel.grid = element_blank(),
         legend.title = element_blank(),
         legend.position = c(0.85, 0.25))
