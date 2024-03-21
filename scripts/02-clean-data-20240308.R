@@ -39,17 +39,16 @@ fn_df |>
 
 # Write out temporary for model
 
-write_csv(fn_df, file = "data_clean/pmass_comb_20240308.csv")
-
-####  Still waiting on dry weights ####
+# write_csv(fn_df, file = "data_clean/pmass_comb_20240308.csv")
 
 # create dataframe of dry weights and calculate RWC
-dry <- data.frame(ID = 1:5,
-                  dry_mass = c(2.8602,
-                               1.0059,
-                               0.9365,
-                               0.9159,
-                               0.6535))
+dry <- data.frame(ID = 1:6,
+                  dry_mass = c(2.1702,
+                               1.0052,
+                               1.6909,
+                               1.5351,
+                               1.4964,
+                               1.9769))
 
 # combined with dry mass and calculate water content
 comb <- fn_df |> 
@@ -58,7 +57,7 @@ comb <- fn_df |>
   mutate(wc = (mass.g - dry_mass) / dry_mass)
 
 comb |> 
-  filter(P.MPa <= 3) |> 
+  # filter(P.MPa <= 3) |> 
   ggplot(aes(x = P.MPa, y = mass.g,
              color = sample)) +
   geom_point() +
@@ -73,7 +72,7 @@ params_list <- comb |>
 
 params <- do.call(rbind, params_list) |> 
   filter(term == "(Intercept)") |> 
-  mutate(ID = 1:5)
+  mutate(ID = 1:6)
 
 # Match to original
 comb2 <- comb |> 
@@ -96,4 +95,4 @@ comb2 |>
 # Save out only TRUE points
 comb2 |> 
   filter(keep == TRUE) |>
-  write_csv("data_clean/pv_comb.csv")
+  write_csv("data_clean/pv_comb_20240308.csv")
