@@ -8,7 +8,7 @@ load(file = "scripts/mod-1/coda/jm_coda.Rdata")
 load(file = "scripts/mod-1/coda/jm_rep.Rdata")
 
 # Load in original data
-pv <- read_csv("data_clean/pv_comb.csv")
+pv <- read_csv("data_clean/pv_comb_20240308.csv")
 
 # Function to predict total water potential
 tpf <- function(x,vec) {
