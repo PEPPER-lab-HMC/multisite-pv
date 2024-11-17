@@ -6,6 +6,7 @@ library(tidyverse)
 library(rjags)
 load.module('dic')
 library(mcmcplots)
+# devtools::install_github("fellmk/PostJAGS/postjags")
 library(postjags)
 library(broom.mixed)
 

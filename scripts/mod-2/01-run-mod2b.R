@@ -8,6 +8,7 @@ library(tidyverse)
 library(rjags)
 load.module('dic')
 library(mcmcplots)
+# devtools::install_github("fellmk/PostJAGS/postjags")
 library(postjags)
 library(broom.mixed)
 
@@ -106,11 +107,11 @@ caterplot(jm_coda, parms = c("cp", "mu.cp"), reorder = FALSE)
 caterplot(jm_coda, parms = c("tlp", "mean.tlp"), reorder = FALSE)
 
 # Restart values
-newinits <- initfind(jm_coda, OpenBUGS = FALSE)
-newinits[[1]]
-saved_state <- removevars(newinits, variables = c(1:10, 15:20, 26))
-saved_state[[1]]
-save(saved_state, file = "scripts/mod-2/inits/inits_mod2b.Rdata")
+# newinits <- initfind(jm_coda, OpenBUGS = FALSE)
+# newinits[[1]]
+# saved_state <- removevars(newinits, variables = c(1:10, 15:20, 26))
+# saved_state[[1]]
+# save(saved_state, file = "scripts/mod-2/inits/inits_mod2b.Rdata")
 # 
 # ind <- which(colnames(jm_coda[[2]]) == "Dsum")
 # mean(jm_coda[[1]][,ind])
@@ -178,7 +179,7 @@ pred <- cbind.data.frame(pv, coda_sum) |>
   mutate(y = 1/P.MPa)
 
 m1 <- lm(pred.mean ~ y, data = pred)
-summary(m1) # R2 = 0.9927, slope = 0.989
+summary(m1) # R2 = 0.9926, slope = 0.989
 
 # Fit plot
 pred |> 
