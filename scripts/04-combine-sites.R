@@ -35,3 +35,6 @@ srer_df <- srer_df |>
 multisite_df <- do.call("rbind", list(onaq_df, cdm_df, srer_df)) |> 
   relocate(site, id, water_pot_mpa, start_weight, weight_g, total_weight_g, mass_lost_g, dry_mass, wc, sat_mass_est, rwc, notes)
   
+write_csv(multisite_df,
+          file = "data_clean/multisite_pv_data.csv")
+
