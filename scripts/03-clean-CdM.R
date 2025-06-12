@@ -58,7 +58,7 @@ juniper_df2 |>
 
 # Throw out Juniper 2, 3, and 6 for unreliable data
 juniper_df2 <- juniper_df2 |> 
-  filter(id != "2" & id != "3" & id != "6")
+  filter(id != "2" & id != "6")
 
 # Clean data for WP measurements taken too close together
 to_remove <- juniper_df2 |> 
@@ -120,7 +120,7 @@ params_list <- comb |>
 
 params <- do.call(rbind, params_list) |> 
   filter(term == "(Intercept)") |> 
-  mutate(id = c(1, 4, 5, 7))
+  mutate(id = c(1, 3, 4, 5, 7))
 
 # Match to comb
 comb2 <- comb |> 
