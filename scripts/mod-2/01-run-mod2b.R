@@ -71,7 +71,7 @@ jm <- jags.model("scripts/mod-2/mod2b.JAGS",
                  #              saved_state[[2]][[1]],
                  #              saved_state[[2]][[3]]),
                  n.chains = 3)
-# update(jm, 10000)
+update(jm, 10000)
 # dic.samples(jm, 10000)
 
 # Monitor posterior samples
@@ -105,6 +105,7 @@ caterplot(jm_coda, parms = c("b", "mu.b"), reorder = FALSE)
 caterplot(jm_coda, parms = c("c", "mu.c"), reorder = FALSE)
 caterplot(jm_coda, parms = c("cp", "mu.cp"), reorder = FALSE)
 caterplot(jm_coda, parms = c("tlp", "mean.tlp"), reorder = FALSE)
+
 
 # Restart values
 # newinits <- initfind(jm_coda, OpenBUGS = FALSE)
