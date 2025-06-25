@@ -120,6 +120,7 @@ caterplot(jm_coda, parms = c("tlp", "mean.tlp"), reorder = FALSE)
 # mean(jm_coda[[3]][,ind])
 
 save(jm_coda, file = "scripts/mod-2/coda/coda_mod2b.Rdata")
+load(file = "scripts/mod-2/coda/coda_mod2b.Rdata")
 
 # Check convergence
 gel <- gelman.diag(jm_coda, multivariate = FALSE)
@@ -165,7 +166,7 @@ coda_rep <- coda.samples(jm,
                          n.thin = 15)
 
 save(coda_rep, file = "scripts/mod-2/coda/rep_mod2b.Rdata")
-
+load(file = "scripts/mod-2/coda/rep_mod2b")
 
 # Summarize replicated output
 coda_sum <- tidyMCMC(coda_rep,

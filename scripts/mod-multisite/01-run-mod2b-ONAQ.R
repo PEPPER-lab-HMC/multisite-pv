@@ -22,13 +22,14 @@ pv <- read_csv("data_clean/sage_pv_curve.csv") |>
                                             ID == "4a" ~ 3,
                                             ID == "5b" ~ 4,
                                             ID == "6" ~ 5,
-                                            ID == "8" ~ 6)) |> 
+                                            ID == "8" ~ 6),
+         rwc_x = 1- rwc) |> 
   filter(!is.na(P.MPa))
 
 # Quick plot
 # Log y
 pv |> 
-  ggplot(aes(x = mass_lost,
+  ggplot(aes(x = rwc_x,
              y = log(1/P.MPa))) +
   geom_vline(xintercept = c(0.1, 0.35),
              lty = "dotted") +
@@ -36,7 +37,7 @@ pv |>
   geom_line(aes(color = factor(ID)))
 # Untransformed y
 pv |> 
-  ggplot(aes(x = mass_lost,
+  ggplot(aes(x = rwc_x,
              y = 1/P.MPa)) +
   geom_vline(xintercept = c(0.1, 0.35),
              lty = "dotted") +
@@ -45,7 +46,7 @@ pv |>
 
 # Create list of data
 dat_list <- list(y = 1/pv$P.MPa,
-                 x = pv$mass_lost,
+                 x = pv$rwc_x,
                  N = nrow(pv),
                  id = factor(pv$ID),
                  Nid = length(unique(pv$ID)),
@@ -69,16 +70,18 @@ inits <- function() {
 inits_list <- list(inits(), inits(), inits())
 
 # Or, load saved state
-load(file = "scripts/mod-2/inits/inits_mod2b.Rdata")
+# load(file = "scripts/mod-2/inits/inits_mod2b.Rdata")
+# load(file = "scripts/mod-multisite/inits/inits_mod2b-ONAQ-2.Rdata")
+load(file = "scripts/mod-multisite/inits/inits_mod2b-ONAQ-1-rwc.Rdata")
 
 # Compile model
 jm <- jags.model("scripts/mod-multisite/mod2b.JAGS",
                  data = dat_list,
-                 inits = saved_state[[2]],
+                 # inits = saved_state[[2]],
                  # inits = inits_list,
-                 # inits = list(saved_state[[2]][[3]],
-                 #              saved_state[[2]][[1]],
-                 #              saved_state[[2]][[3]]),
+                 inits = list(saved_state[[2]][[1]],
+                              saved_state[[2]][[2]],
+                              saved_state[[2]][[1]]),
                  n.chains = 3)
 update(jm, 10000)
 # dic.samples(jm, 10000)
@@ -120,14 +123,15 @@ caterplot(jm_coda, parms = c("tlp", "mean.tlp"), reorder = FALSE)
 # newinits[[1]]
 # saved_state <- removevars(newinits, variables = c(1:10, 15:20, 26))
 # saved_state[[1]]
-# save(saved_state, file = "scripts/mod-2/inits/inits_mod2b.Rdata")
-# 
-# ind <- which(colnames(jm_coda[[2]]) == "Dsum")
-# mean(jm_coda[[1]][,ind])
-# mean(jm_coda[[2]][,ind])
-# mean(jm_coda[[3]][,ind])
+# save(saved_state, file = "scripts/mod-multisite/inits/inits_mod2b-ONAQ-1-rwc.Rdata")
 
-save(jm_coda, file = "scripts/mod-multisite/coda/coda_mod2b-ONAQ.Rdata")
+ind <- which(colnames(jm_coda[[2]]) == "Dsum")
+mean(jm_coda[[1]][,ind]) # pink
+mean(jm_coda[[2]][,ind]) # green
+mean(jm_coda[[3]][,ind]) # blue
+
+# save(jm_coda, file = "scripts/mod-multisite/coda/coda_mod2b-ONAQ-1-rwc.Rdata")
+# load(file = "scripts/mod-multisite/coda/coda_mod2b-ONAQ.Rdata")
 
 # Check convergence
 gel <- gelman.diag(jm_coda, multivariate = FALSE)
@@ -172,8 +176,8 @@ coda_rep <- coda.samples(jm,
                          n.iter = 15000,
                          n.thin = 15)
 
-save(coda_rep, file = "scripts/mod-multisite/coda/rep_mod2b-ONAQ.Rdata")
-
+# save(coda_rep, file = "scripts/mod-multisite/coda/rep_mod2b-ONAQ-1-rwc.Rdata")
+# load(file = "scripts/mod-multisite/coda/rep_mod2b-ONAQ.Rdata")
 
 # Summarize replicated output
 coda_sum <- tidyMCMC(coda_rep,
@@ -188,7 +192,7 @@ pred <- cbind.data.frame(pv, coda_sum) |>
   mutate(y = 1/P.MPa)
 
 m1 <- lm(pred.mean ~ y, data = pred)
-summary(m1) # R2 = 0.9926, slope = 0.989
+summary(m1) # R2 = 0.9898, slope = 0.9809
 
 # Fit plot
 pred |> 
