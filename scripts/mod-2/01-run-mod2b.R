@@ -71,7 +71,7 @@ jm <- jags.model("scripts/mod-2/mod2b.JAGS",
                  #              saved_state[[2]][[1]],
                  #              saved_state[[2]][[3]]),
                  n.chains = 3)
-# update(jm, 10000)
+update(jm, 10000)
 # dic.samples(jm, 10000)
 
 # Monitor posterior samples
@@ -106,6 +106,7 @@ caterplot(jm_coda, parms = c("c", "mu.c"), reorder = FALSE)
 caterplot(jm_coda, parms = c("cp", "mu.cp"), reorder = FALSE)
 caterplot(jm_coda, parms = c("tlp", "mean.tlp"), reorder = FALSE)
 
+
 # Restart values
 # newinits <- initfind(jm_coda, OpenBUGS = FALSE)
 # newinits[[1]]
@@ -119,6 +120,7 @@ caterplot(jm_coda, parms = c("tlp", "mean.tlp"), reorder = FALSE)
 # mean(jm_coda[[3]][,ind])
 
 save(jm_coda, file = "scripts/mod-2/coda/coda_mod2b.Rdata")
+load(file = "scripts/mod-2/coda/coda_mod2b.Rdata")
 
 # Check convergence
 gel <- gelman.diag(jm_coda, multivariate = FALSE)
@@ -164,7 +166,7 @@ coda_rep <- coda.samples(jm,
                          n.thin = 15)
 
 save(coda_rep, file = "scripts/mod-2/coda/rep_mod2b.Rdata")
-
+load(file = "scripts/mod-2/coda/rep_mod2b")
 
 # Summarize replicated output
 coda_sum <- tidyMCMC(coda_rep,

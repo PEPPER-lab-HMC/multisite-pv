@@ -9,14 +9,15 @@ theme_set(theme_bw())
 
 cdm_df <- read_csv("data_clean/juniper_pv_curve.csv") |> 
   select(-...1, -dt, -dry_weight_g, -total_dryweight_g) |> 
-  mutate(site = "CdM")
+  mutate(site = "CdM", water_pot_mpa = abs(water_pot_mpa))
 
 onaq_df <- read_csv("data_clean/sage_pv_curve.csv") |> 
   select(-...1, -dt, -total_dryweight_g) |> 
-  mutate(site = "ONAQ")
+  mutate(site = "ONAQ", water_pot_mpa = abs(water_pot_mpa))
 
 srer_df <- read_csv("data_clean/pv_comb_20240308.csv") |> 
   rename(water_pot_mpa = P.MPa, id = ID, weight_g = mass.g, mass_lost_g = mass_lost, notes = note) |> 
+  filter(keep == TRUE) |> 
   select(-sample, -leaf.mass.g, -offset.mass.g, -keep) |> 
   mutate(site = "SRER", total_weight_g = weight_g)         # Keeping the weight_g column as the total_weight_g column
 
