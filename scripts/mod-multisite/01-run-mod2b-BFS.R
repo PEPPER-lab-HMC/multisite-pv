@@ -13,7 +13,7 @@ library(postjags)
 library(broom.mixed)
 
 # Load data
-pv <- read_csv("data_clean/BFS_pv_curve2.csv") |>
+pv <- read_csv("data_clean/BFS_pv_curve.csv") |>
   clean_names() |> 
   select(-x1) |> 
   rename(mass_lost = mass_lost_g, ID = id, P.MPa = water_pot_mpa) |> 
@@ -24,16 +24,18 @@ pv <- read_csv("data_clean/BFS_pv_curve2.csv") |>
 # Log y
 pv |> 
   ggplot(aes(x = mass_lost,
-             y = log(1/P.MPa))) +
-  geom_vline(xintercept = c(0.1, 0.35),
+             y = log(1/P.MPa),
+             group = interaction(ID, week))) +
+  geom_vline(xintercept = c(0.01, 0.1),
              lty = "dotted") +
   geom_point(aes(color = factor(ID))) +
   geom_line(aes(color = factor(ID)))
 # Untransformed y
 pv |> 
   ggplot(aes(x = mass_lost,
-             y = 1/P.MPa)) +
-  geom_vline(xintercept = c(0.1, 0.35),
+             y = 1/P.MPa,
+             group = interaction(ID, week))) +
+  geom_vline(xintercept = c(0.01, 0.01),
              lty = "dotted") +
   geom_point(aes(color = factor(ID))) +
   geom_line(aes(color = factor(ID)))
@@ -43,6 +45,7 @@ dat_list <- list(y = 1/pv$P.MPa,
                  x = pv$mass_lost,
                  N = nrow(pv),
                  id = factor(pv$ID),
+                 week = factor(pv$week),
                  Nid = length(unique(pv$ID)),
                  Sa = 2,
                  Sb = 2,
@@ -64,17 +67,17 @@ inits <- function() {
 inits_list <- list(inits(), inits(), inits())
 
 # Or, load saved state
-# load(file = "scripts/mod-multisite/inits/inits_mod2b-BFS2.Rdata") # BFS2 with chains 1 and 2 is best?
-load(file = "scripts/mod-2/inits/inits_mod2b.Rdata")
+load(file = "scripts/mod-multisite/inits/inits_mod2b-BFS2.Rdata") # BFS2 with chains 1 and 2
+# load(file = "scripts/mod-2/inits/inits_mod2b.Rdata")
 
 # Compile model
 jm <- jags.model("scripts/mod-multisite/mod2b-BFS.JAGS",
                  data = dat_list,
-                 inits = saved_state[[2]],
+                 # inits = saved_state[[2]],
                  # inits = inits_list,
-                 # inits = list(saved_state[[2]][[1]],
-                 #              saved_state[[2]][[2]],
-                 #              saved_state[[2]][[1]]),
+                 inits = list(saved_state[[2]][[1]],
+                              saved_state[[2]][[2]],
+                              saved_state[[2]][[1]]),
                  n.chains = 3)
 update(jm, 10000)
 # dic.samples(jm, 10000)
@@ -116,15 +119,15 @@ caterplot(jm_coda, parms = c("tlp", "mean.tlp"), reorder = FALSE)
 # newinits[[1]]
 # saved_state <- removevars(newinits, variables = c(1:10, 15:20, 26))
 # saved_state[[1]]
-# save(saved_state, file = "scripts/mod-multisite/inits/inits_mod2b-BFS4.Rdata")
-
+# save(saved_state, file = "scripts/mod-multisite/inits/inits_mod2b-BFS2-2.Rdata")
+# 
 # ind <- which(colnames(jm_coda[[2]]) == "Dsum")
 # mean(jm_coda[[1]][,ind]) # pink
 # mean(jm_coda[[2]][,ind]) # green
 # mean(jm_coda[[3]][,ind]) # blue
 
-# save(jm_coda, file = "scripts/mod-multisite/coda/coda_mod2b-BFS.Rdata")
-# load(file = "scripts/mod-multisite/coda/coda_mod2b-BFS.Rdata")
+# save(jm_coda, file = "scripts/mod-multisite/coda/coda_mod2b-BFS2.Rdata")
+# load(file = "scripts/mod-multisite/coda/coda_mod2b-BFS2.Rdata")
 
 # Check convergence
 gel <- gelman.diag(jm_coda, multivariate = FALSE)
@@ -169,8 +172,8 @@ coda_rep <- coda.samples(jm,
                          n.iter = 15000,
                          n.thin = 15)
 
-# save(coda_rep, file = "scripts/mod-multisite/coda/rep_mod2b-BFS.Rdata")
-# load(file = "scripts/mod-multisite/coda/rep_mod2b-BFS.Rdata")
+# save(coda_rep, file = "scripts/mod-multisite/coda/rep_mod2b-BFS2.Rdata")
+# load(file = "scripts/mod-multisite/coda/rep_mod2b-BFS2.Rdata")
 
 # Summarize replicated output
 coda_sum <- tidyMCMC(coda_rep,
@@ -185,7 +188,7 @@ pred <- cbind.data.frame(pv, coda_sum) |>
   mutate(y = 1/P.MPa)
 
 m1 <- lm(pred.mean ~ y, data = pred)
-summary(m1) # R2 = , slope = 
+summary(m1) # R2 = 0.9803, slope = 0.9766, # R2 = 0.99, slope = 0.989
 
 # Fit plot
 pred |> 
@@ -220,10 +223,12 @@ cps <- param_sum |>
                         ID_temp == 4 ~ 46,
                         ID_temp == 5 ~ 69,
                         ID_temp == 6 ~ 122,
-                        ID_temp == 7 ~ 56,
-                        ID_temp == 8 ~ 86,
-                        ID_temp == 9 ~ 90,
-                        ID_temp == 10 ~ 91))
+                        ID_temp == 7 ~ 101,
+                        ID_temp == 8 ~ 51,
+                        ID_temp == 9 ~ 56,
+                        ID_temp == 10 ~ 86,
+                        ID_temp == 11 ~ 90,
+                        ID_temp == 12 ~ 91))
 
 tlps <- param_sum |> 
   filter(grepl("^tlp", term)) |> 
@@ -236,10 +241,12 @@ tlps <- param_sum |>
                         ID_temp == 4 ~ 46,
                         ID_temp == 5 ~ 69,
                         ID_temp == 6 ~ 122,
-                        ID_temp == 7 ~ 56,
-                        ID_temp == 8 ~ 86,
-                        ID_temp == 9 ~ 90,
-                        ID_temp == 10 ~ 91),
+                        ID_temp == 7 ~ 101,
+                        ID_temp == 8 ~ 51,
+                        ID_temp == 9 ~ 56,
+                        ID_temp == 10 ~ 86,
+                        ID_temp == 11 ~ 90,
+                        ID_temp == 12 ~ 91),
          x = 0.1,
          y = 0.95,
          lab = paste0("TLP = ", round(pred.median, 3)))

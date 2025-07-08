@@ -122,8 +122,8 @@ caterplot(jm_coda, parms = c("tlp", "mean.tlp"), reorder = FALSE)
 # mean(jm_coda[[2]][,ind])
 # mean(jm_coda[[3]][,ind])
 
-save(jm_coda, file = "scripts/mod-multisite/coda/coda_mod2b-CdM.Rdata")
-load(file = "scripts/mod-multisite/coda/coda_mod2b-CdM.Rdata")
+# save(jm_coda, file = "scripts/mod-multisite/coda/coda_mod2b-CdM.Rdata")
+# load(file = "scripts/mod-multisite/coda/coda_mod2b-CdM.Rdata")
 
 # Check convergence
 gel <- gelman.diag(jm_coda, multivariate = FALSE)
@@ -168,8 +168,8 @@ coda_rep <- coda.samples(jm,
                          n.iter = 15000,
                          n.thin = 15)
 
-save(coda_rep, file = "scripts/mod-multisite/coda/rep_mod2b-CdM.Rdata")
-load(file = "scripts/mod-multisite/coda/rep_mod2b-CdM.Rdata")
+# save(coda_rep, file = "scripts/mod-multisite/coda/rep_mod2b-CdM.Rdata")
+# load(file = "scripts/mod-multisite/coda/rep_mod2b-CdM.Rdata")
 
 # Summarize replicated output
 coda_sum <- tidyMCMC(coda_rep,
@@ -184,7 +184,7 @@ pred <- cbind.data.frame(pv, coda_sum) |>
   mutate(y = 1/P.MPa)
 
 m1 <- lm(pred.mean ~ y, data = pred)
-summary(m1) # R2 = 0.9959, slope = 0.9948
+summary(m1) # R2 = 0.9961, slope = 0.9945
 
 # Fit plot
 pred |> 

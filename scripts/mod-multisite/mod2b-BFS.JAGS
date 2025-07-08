@@ -22,7 +22,7 @@ model{
   }
   
   # Priors for id-level parameters
-  for(s in 1:Nid) { # Number of samples
+  for(s in 1:(Nid + Nweek / 2)) { # Number of samples
     a[s] ~ dlnorm(mu.log.a, tau.log.a)
     b[s] ~ dlnorm(mu.log.b, tau.log.b)
     c[s] ~ dlnorm(mu.log.c, tau.log.c) # constrain to be negative

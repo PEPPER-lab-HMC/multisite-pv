@@ -5,11 +5,10 @@ library(coda)
 library(broom.mixed)
 
 # Load data
-pv <- read_csv("data_clean/pmass_comb_20240308.csv") |>
-  filter(keep == TRUE)
+pv <- read_csv("data_clean/juniper_pv_curve.csv")
 
 # Load coda
-load("scripts/mod-2/coda/coda_mod2b.Rdata")
+load("scripts/mod-multisite/coda/coda_mod2b-CdM.Rdata")
 
 # Summarize coda output
 coda_sum <- tidyMCMC(jm_coda,
@@ -27,13 +26,13 @@ tlp <- coda_sum |>
 # Untransformed y
 ggplot(pv, ) +
   geom_point(data = pv,
-             aes(x = mass_lost,
-                 y = 1/P.MPa,
-                 color = factor(ID))) +
+             aes(x = mass_lost_g,
+                 y = 1/water_pot_mpa,
+                 color = factor(id))) +
   geom_line(data = pv,
-            aes(x = mass_lost,
-                y = 1/P.MPa,
-                color = factor(ID))) +
+            aes(x = mass_lost_g,
+                y = 1/water_pot_mpa,
+                color = factor(id))) +
   geom_rect(data = tlp,
             aes(xmin = -Inf, xmax = Inf,
                 ymin = -1/pred.upper, ymax = -1/pred.lower),
@@ -43,7 +42,7 @@ ggplot(pv, ) +
              lty = "dashed",
              size = 1) +
   geom_text(data = tlp,
-            aes(x = 0.7, y = 0.85, label = lab),
+            aes(x = 0.4, y = 0.85, label = lab),
             hjust = 0,
             size = 5,
             parse = TRUE) +

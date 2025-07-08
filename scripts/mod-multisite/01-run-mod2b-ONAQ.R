@@ -78,10 +78,10 @@ load(file = "scripts/mod-multisite/inits/inits_mod2b-ONAQ-1-rwc.Rdata")
 jm <- jags.model("scripts/mod-multisite/mod2b.JAGS",
                  data = dat_list,
                  # inits = saved_state[[2]],
-                 # inits = inits_list,
-                 inits = list(saved_state[[2]][[1]],
-                              saved_state[[2]][[2]],
-                              saved_state[[2]][[1]]),
+                 inits = inits_list,
+                 # inits = list(saved_state[[2]][[1]],
+                 #              saved_state[[2]][[2]],
+                 #              saved_state[[2]][[1]]),
                  n.chains = 3)
 update(jm, 10000)
 # dic.samples(jm, 10000)
