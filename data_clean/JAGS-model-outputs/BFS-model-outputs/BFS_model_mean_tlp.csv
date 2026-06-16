@@ -1,0 +1,2 @@
+term,pred.mean,std.error,pred.lower,pred.upper,lab
+mean.tlp,-2.4631624806399084,0.05126182202263345,-2.5663553243285135,-2.3669261827220156,bold(Psi[TLP] == -2.46)
