@@ -4,6 +4,7 @@
 .Ruserdata
 .Rprofile
 
-scripts/mod-1/coda  
-scripts/mod-1/inits
+scripts/mod-1/coda
+scripts/mod-2/coda
+scripts/mod-multisite/coda
 data_raw/

@@ -6,7 +6,6 @@ model{
     y[i] ~ dnorm(mu[i], tau)
     # Predictive distribution
     y.rep[i] ~ dnorm(mu[i], tau)
-    # residuals
     resid[i] <- mu[i] - y[i]
     # squared differences
     sqdiff[i] <- pow(y[i] - y.rep[i], 2)
