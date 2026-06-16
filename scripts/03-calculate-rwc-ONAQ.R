@@ -131,8 +131,4 @@ comb2 |>
 
 #Save this out here!!!
 write.csv(comb2,
-<<<<<<< Updated upstream
           file = "data_clean/03-pv-curve-data/ONAQ_pv_curve.csv")
-=======
-          file = "data_clean/sage_pv_curve.csv")
->>>>>>> Stashed changes

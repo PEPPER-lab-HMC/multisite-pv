@@ -13,11 +13,7 @@ library(postjags)
 library(broom.mixed)
 
 # Load data
-<<<<<<< Updated upstream
-pv <- read_csv("data_clean/03-pv-curve-data/BFS_pv_curve.csv") |>
-=======
 pv <- read_csv("data_clean/BFS_pv_curve.csv") |>
->>>>>>> Stashed changes
   clean_names() |> 
   select(-x1) |> 
   rename(mass_lost = mass_lost_g, ID = super_id, P.MPa = p_mpa) |> 
@@ -303,7 +299,6 @@ pred |>
 
 #### Write out TLPs ####
 write_csv(pred,
-<<<<<<< Updated upstream
           file = "data_clean/JAGS-model-outputs/BFS-model-outputs/BFS_model_pred.csv")
 write_csv(cps,
           file = "data_clean/JAGS-model-outputs/BFS-model-outputs/BFS_model_cps.csv")
@@ -313,14 +308,3 @@ write_csv(ds,
           file = "data_clean/JAGS-model-outputs/BFS-model-outputs/BFS_model_ds.csv")
 write_csv(cs,
           file = "data_clean/JAGS-model-outputs/BFS-model-outputs/BFS_model_cs.csv")
-=======
-          file = "data_clean/BFS-model-outputs/BFS_model_pred.csv")
-write_csv(cps,
-          file = "data_clean/BFS-model-outputs/BFS_model_cps.csv")
-write_csv(tlps,
-          file = "data_clean/BFS-model-outputs/BFS_model_tlps.csv")
-write_csv(ds,
-          file = "data_clean/BFS-model-outputs/BFS_model_ds.csv")
-write_csv(cs,
-          file = "data_clean/BFS-model-outputs/BFS_model_cs.csv")
->>>>>>> Stashed changes

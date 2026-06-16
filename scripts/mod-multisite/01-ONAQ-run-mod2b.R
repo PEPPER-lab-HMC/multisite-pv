@@ -11,16 +11,10 @@ library(mcmcplots)
 # devtools::install_github("fellmk/PostJAGS/postjags")
 library(postjags)
 library(broom.mixed)
-<<<<<<< Updated upstream
 library(janitor)
 
 # Load data
-pv <- read_csv("data_clean/03-pv-curve-data/ONAQ_pv_curve.csv") |>
-=======
-
-# Load data
 pv <- read_csv("data_clean/sage_pv_curve.csv") |>
->>>>>>> Stashed changes
   clean_names() |> 
   select(-x1) |> 
   rename(mass_lost = mass_lost_g, ID = id, P.MPa = water_pot_mpa, mass.g = total_weight_g) |> 
@@ -97,10 +91,7 @@ params <- c("deviance", "Dsum", "R2", # model fit parameters
             "a", "mu.a", "mu.log.a", "sig.log.a", "tau.eps.a",
             "b", "mu.b", "mu.log.b", "sig.log.b", "tau.eps.b", 
             "c", "mu.c", "mu.log.c", "sig.log.c", "tau.eps.c",
-<<<<<<< Updated upstream
             "d",
-=======
->>>>>>> Stashed changes
             "cp", "mu.cp", "sig.cp", "tau.eps.cp",
             "tau", "sig", # observation precision terms
             "tlp", "mu.tlp", "mean.tlp" # calculated turgor loss points
@@ -240,7 +231,6 @@ tlps <- param_sum |>
          y = 0.95,
          lab = paste0("TLP = ", round(pred.mean, 3)))
 
-<<<<<<< Updated upstream
 cs <- param_sum |> 
   filter(grepl("^c", term)) |> 
   tidyr::separate(term, 
@@ -263,8 +253,6 @@ ds <- param_sum |>
   relocate(Parameter) |> 
   mutate(ID = as.numeric(ID))
 
-=======
->>>>>>> Stashed changes
 # Curves
 pred |> 
   ggplot() +
@@ -296,7 +284,6 @@ pred |>
         legend.title = element_blank(),
         legend.position = c(0.85, 0.25))
 
-<<<<<<< Updated upstream
 #### Write out TLPs ####
 write_csv(pred,
           file = "data_clean/JAGS-model-outputs/ONAQ-model-outputs/ONAQ_model_pred.csv")
@@ -308,5 +295,4 @@ write_csv(ds,
           file = "data_clean/JAGS-model-outputs/ONAQ-model-outputs/ONAQ_model_ds.csv")
 write_csv(cs,
           file = "data_clean/JAGS-model-outputs/ONAQ-model-outputs/ONAQ_model_cs.csv")
-=======
->>>>>>> Stashed changes
+

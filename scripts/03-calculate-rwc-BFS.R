@@ -27,11 +27,7 @@ comb <- sageb_df3 |>
   mutate(wc = (mass_g - dry_mass) / dry_mass)
 
 comb |> 
-<<<<<<< Updated upstream
-  ggplot(aes(x = mass_lost_g, y = P_mpa,
-=======
   ggplot(aes(x = P_mpa, y = mass_g,
->>>>>>> Stashed changes
              color = as.factor(shrubID))) +
   geom_point() +
   geom_line() +
@@ -60,12 +56,8 @@ for(i in 1:length(superIDs)) {
     
     cur_lm <- lm(mass_g ~ P_mpa, data = cur_model)
     
-<<<<<<< Updated upstream
     temp_df <- temp_df |>
       add_row(r2 = summary(cur_lm)$r.squared, n = (j + 2), slope = coef(cur_lm)[2], intercept = coef(cur_lm)[1])
-=======
-    temp_df <- temp_df |> add_row(r2 = summary(cur_lm)$r.squared, n = (j + 2), slope = coef(cur_lm)[2], intercept = coef(cur_lm)[1])
->>>>>>> Stashed changes
   }
   temp_df <- temp_df |> 
     mutate(superID = superIDs[i]) |> 
@@ -107,20 +99,7 @@ comb2 |>
   facet_wrap(~ week)
 
 # PV curve (1/WP)
-<<<<<<< Updated upstream
 comb2 |> filter(superID != 8) |> 
-  ggplot(aes(x = rwc_plotting, y = -1/P_mpa,
-             color = as.factor(week),
-             shape = as.factor(state))) +
-  geom_point(size = 5) +
-  geom_line(size = 1) +
-  scale_x_continuous("(1-RWC)") +
-  scale_y_continuous(expression(paste("1/", Psi, " (-", MPa^-1, ")"))) + 
-  facet_wrap(~ shrubID, scales = "free") +
-  labs(color = "Week") +
-  guides(shape = "none") +
-=======
-comb2 |> 
   ggplot(aes(x = rwc_plotting, y = -1/P_mpa,
              color = as.factor(week),
              shape = as.factor(state))) +
@@ -129,16 +108,13 @@ comb2 |>
   scale_x_continuous("(1-RWC)") +
   scale_y_continuous(expression(paste("1/", Psi, " (-", MPa^-1, ")"))) + 
   facet_wrap(~ shrubID, scales = "free") +
->>>>>>> Stashed changes
+  labs(color = "Week") +
+  guides(shape = "none") +
+  facet_wrap(~ shrubID, scales = "free") +
   theme(panel.grid = element_blank(),
         legend.title = element_text(size = 25),
         legend.text = element_text(size = 19),
         axis.text = element_text(size = 15),
-<<<<<<< Updated upstream
-        # axis.text.x = element_blank(),
-        # axis.text.y = element_blank(),
-=======
->>>>>>> Stashed changes
         axis.title = element_text(size = 25),
         strip.text = element_text(size = 15))
 
@@ -160,11 +136,7 @@ comb2 |> filter(shrubID != 51 & week != 3) |>
 
 # (WP)
 comb2 |> 
-<<<<<<< Updated upstream
-  ggplot(aes(x = rwc, y = P_mpa,
-=======
   ggplot(aes(x = rwc_plotting, y = P_mpa,
->>>>>>> Stashed changes
              color = factor(shrubID), shape = as.factor(state), group = interaction(shrubID, week))) +
   geom_point() +
   geom_line() +
@@ -173,7 +145,6 @@ comb2 |>
   theme(panel.grid = element_blank(),
         legend.title = element_blank())
 
-<<<<<<< Updated upstream
 comb2 |> 
   ggplot(aes(x = rwc, y = P_mpa,
              color = factor(shrubID), shape = as.factor(state), group = interaction(shrubID, week))) +
@@ -188,8 +159,3 @@ comb2 |>
 #Save this out here!!!
 write.csv(comb2,
           file = "data_clean/03-pv-curve-data/BFS_pv_curve.csv")
-=======
-#Save this out here!!!
-write.csv(comb2,
-          file = "data_clean/BFS_pv_curve.csv")
->>>>>>> Stashed changes

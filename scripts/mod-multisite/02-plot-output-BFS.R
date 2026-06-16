@@ -5,12 +5,8 @@ library(coda)
 library(broom.mixed)
 
 # Load data
-<<<<<<< Updated upstream
 pv <- read_csv("data_clean/03-pv-curve-data/BFS_pv_curve.csv") |> 
   filter()
-=======
-pv <- read_csv("data_clean/BFS_pv_curve.csv")
->>>>>>> Stashed changes
 
 # Load coda
 load(file = "scripts/mod-multisite/coda/coda_mod2b-BFS.Rdata")
@@ -28,11 +24,8 @@ tlp <- coda_sum |>
   filter(term == "mean.tlp") |>
   mutate(lab = paste0("bold(Psi[TLP] == ", round(pred.mean, 2), ")"))
 
-<<<<<<< Updated upstream
 write_csv(tlp, file = "data_clean/JAGS-model-outputs/BFS-model-outputs/BFS_model_mean_tlp.csv")
 
-=======
->>>>>>> Stashed changes
 # Untransformed y
 ggplot(pv, ) +
   geom_point(data = pv,

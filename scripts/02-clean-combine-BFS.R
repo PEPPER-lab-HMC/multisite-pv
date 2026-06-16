@@ -132,11 +132,8 @@ sageb_df3 |>
   scale_x_continuous(expression(paste("Mass lost (", H[2], "O lost)"))) +
   scale_y_continuous(expression(paste("1/", Psi, " (-", MPa^-1, ")"))) +
   scale_color_discrete("ID") +
-<<<<<<< Updated upstream
   facet_wrap(~ week, scales = "free") +
-=======
   facet_wrap(~ week) +
->>>>>>> Stashed changes
   theme(panel.grid = element_blank(),
         legend.text = element_text(size = 13),
         legend.title = element_text(size = 15),
