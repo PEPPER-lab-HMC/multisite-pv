@@ -13,7 +13,7 @@ library(postjags)
 library(broom.mixed)
 
 # Load data
-pv <- read_csv("data_clean/BFS_pv_curve.csv") |>
+pv <- read_csv("data_clean/03-pv-curve-data/BFS_pv_curve.csv") |>
   clean_names() |> 
   select(-x1) |> 
   rename(mass_lost = mass_lost_g, ID = super_id, P.MPa = p_mpa) |> 

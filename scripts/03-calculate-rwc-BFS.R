@@ -10,7 +10,7 @@ library(here)
 theme_set(theme_bw())
 
 # Read in output of 3a
-sageb_df3 <- read_csv("data_clean/BFS-clean1.csv") |> 
+sageb_df3 <- read_csv("data_clean/02-cleaning-outputs/02-BFS-cleaning-output.csv") |> 
   mutate(superID = consecutive_id(shrubID))
 
 # Concatenate dry weights

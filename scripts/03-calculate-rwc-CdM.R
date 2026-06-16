@@ -10,7 +10,7 @@ library(here)
 theme_set(theme_bw())
 
 # Read in output of 3a
-juniper_df3 <- read_csv("data_clean/02-CdM-cleaning-output.csv") |> 
+juniper_df3 <- read_csv("data_clean/02-cleaning-outputs/02-CdM-cleaning-output.csv") |> 
   mutate(superID = consecutive_id(id))
 
 # Concatenate dry weights

@@ -86,4 +86,4 @@ sage_df3 |>
         axis.title = element_text(size = 25),
         strip.text = element_text(size = 15))
 
-write_csv(sage_df3, "data_clean/02-ONAQ-cleaning-output.csv")
+write_csv(sage_df3, "data_clean/o2-cleaning0outputs/02-ONAQ-cleaning-output.csv")

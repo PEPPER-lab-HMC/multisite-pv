@@ -141,7 +141,7 @@ sageb_df3 |>
         axis.title = element_text(size = 15),
         strip.text = element_text(size = 15))
 
-write_csv(sageb_df3, "data_clean/02-BFS-cleaning-output.csv")
+write_csv(sageb_df3, "data_clean/02-cleaning-outputs/02-BFS-cleaning-output.csv")
 
 
 

@@ -14,7 +14,7 @@ library(broom.mixed)
 library(janitor)
 
 # Load data
-pv <- read_csv("data_clean/sage_pv_curve.csv") |>
+pv <- read_csv("data_clean/03-pv-curve-data/ONAQ_pv_curve.csv") |>
   clean_names() |> 
   select(-x1) |> 
   rename(mass_lost = mass_lost_g, ID = id, P.MPa = water_pot_mpa, mass.g = total_weight_g) |> 
