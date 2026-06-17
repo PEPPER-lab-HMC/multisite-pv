@@ -10,11 +10,7 @@ library(here)
 theme_set(theme_bw())
 
 # Read in output of 3a
-<<<<<<< Updated upstream
 juniper_df3 <- read_csv("data_clean/02-cleaning-outputs/02-CdM-cleaning-output.csv") |> 
-=======
-juniper_df3 <- read_csv("data_clean/02-CdM-cleaning-output.csv") |> 
->>>>>>> Stashed changes
   mutate(superID = consecutive_id(id))
 
 # Concatenate dry weights
@@ -86,11 +82,7 @@ comb1.2 <- comb |>
 
 comb1.2 |> 
   ggplot(aes(x = water_pot_mpa, y = total_weight_g,
-<<<<<<< Updated upstream
-             color = keep, group = superID)) +
-=======
              color = as.factor(keep), group = superID)) +
->>>>>>> Stashed changes
   geom_point() +
   geom_line() +
   geom_vline(xintercept = 0) +
@@ -141,10 +133,4 @@ comb2 |>
 
 #Save this out here!!!
 write.csv(comb2,
-<<<<<<< Updated upstream
           file = "data_clean/03-pv-curve-data/CdM_pv_curve.csv")
-=======
-          file = "data_clean/juniper_pv_curve.csv")
->>>>>>> Stashed changes
-
-

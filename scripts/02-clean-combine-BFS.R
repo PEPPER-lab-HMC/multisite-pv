@@ -132,11 +132,8 @@ sageb_df3 |>
   scale_x_continuous(expression(paste("Mass lost (", H[2], "O lost)"))) +
   scale_y_continuous(expression(paste("1/", Psi, " (-", MPa^-1, ")"))) +
   scale_color_discrete("ID") +
-<<<<<<< Updated upstream
   facet_wrap(~ week, scales = "free") +
-=======
   facet_wrap(~ week) +
->>>>>>> Stashed changes
   theme(panel.grid = element_blank(),
         legend.text = element_text(size = 13),
         legend.title = element_text(size = 15),
@@ -144,7 +141,7 @@ sageb_df3 |>
         axis.title = element_text(size = 15),
         strip.text = element_text(size = 15))
 
-write_csv(sageb_df3, "data_clean/02-BFS-cleaning-output.csv")
+write_csv(sageb_df3, "data_clean/02-cleaning-outputs/02-BFS-cleaning-output.csv")
 
 
 

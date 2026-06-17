@@ -9,7 +9,6 @@ theme_set(theme_bw())
 
 #### Read in model predicted TLPs ####
 
-<<<<<<< Updated upstream
 pred <- read_csv("data_clean/JAGS-model-outputs/CdM-model-outputs/CdM_model_pred.csv") |> 
   select(-term)
 cps <- read_csv("data_clean/JAGS-model-outputs/CdM-model-outputs/CdM_model_cps.csv") |>
@@ -19,17 +18,6 @@ tlps <- read_csv("data_clean/JAGS-model-outputs/CdM-model-outputs/CdM_model_tlps
 ds <- read_csv("data_clean/JAGS-model-outputs/CdM-model-outputs/CdM_model_ds.csv") |> 
   rename(d_value = pred.median, d_std.error = std.error, d_pred.lower = pred.lower, d_pred.upper = pred.upper)
 cs <- read_csv("data_clean/JAGS-model-outputs/CdM-model-outputs/CdM_model_cs.csv") |> 
-=======
-pred <- read_csv("data_clean/CdM-model-outputs/CdM_model_pred.csv") |> 
-  select(-term)
-cps <- read_csv("data_clean/CdM-model-outputs/CdM_model_cps.csv") |>
-  rename(cp_value = pred.median, cp_std.error = std.error, cp_pred.lower = pred.lower, cp_pred.upper = pred.upper)
-tlps <- read_csv("data_clean/CdM-model-outputs/CdM_model_tlps.csv") |>
-  rename(tlp_value = pred.median, tlp_std.error = std.error, tlp_pred.lower = pred.lower, tlp_pred.upper = pred.upper, lab_x = x, lab_y = y)
-ds <- read_csv("data_clean/CdM-model-outputs/CdM_model_ds.csv") |> 
-  rename(d_value = pred.median, d_std.error = std.error, d_pred.lower = pred.lower, d_pred.upper = pred.upper)
-cs <- read_csv("data_clean/CdM-model-outputs/CdM_model_cs.csv") |> 
->>>>>>> Stashed changes
   rename(c_value = pred.median, c_std.error = std.error, c_pred.lower = pred.lower, c_pred.upper = pred.upper)
 
 line_params <- merge(ds, cs, by = c("ID")) |> 

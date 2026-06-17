@@ -90,4 +90,4 @@ juniper_df3 |>
         strip.text = element_text(size = 15))
 
 write_csv(juniper_df3,
-          "data_clean/02-CdM-cleaning-output.csv")
+          "data_clean/02-cleaning-outputs/02-CdM-cleaning-output.csv")

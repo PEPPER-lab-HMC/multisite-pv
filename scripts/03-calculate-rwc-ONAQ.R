@@ -10,7 +10,7 @@ library(here)
 theme_set(theme_bw())
 
 # Read in output of 3a
-sage_df3 <- read_csv("data_clean/02-ONAQ-cleaning-output.csv") |> 
+sage_df3 <- read_csv("data_clean/02-cleaning-outputs/02-ONAQ-cleaning-output.csv") |> 
   mutate(superID = consecutive_id(id))
 
 # Concatenate dry weights
@@ -131,8 +131,4 @@ comb2 |>
 
 #Save this out here!!!
 write.csv(comb2,
-<<<<<<< Updated upstream
           file = "data_clean/03-pv-curve-data/ONAQ_pv_curve.csv")
-=======
-          file = "data_clean/sage_pv_curve.csv")
->>>>>>> Stashed changes
